@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	gh "github.com/cli/go-gh"
+	"github.com/eikster-dk/gh-worktree/internal/cli"
 	"github.com/spf13/cobra"
 )
 
@@ -73,6 +74,7 @@ func NewRoot() *cobra.Command {
 	}
 
 	cmd.AddCommand(NewClone())
+	cmd.AddCommand(cli.NewPr())
 
 	return cmd
 }
