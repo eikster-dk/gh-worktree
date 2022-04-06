@@ -1,6 +1,11 @@
 # gh-worktree
 A github cli extension with helper methods for git worktree related tasks.
 
+# Installation
+```
+gh extension install eikster-dk/gh-worktree
+```
+
 # usage
 ```
 Work seamlessly across git worktree and gh cli tooling
