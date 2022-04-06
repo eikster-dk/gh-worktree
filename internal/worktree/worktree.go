@@ -6,7 +6,7 @@ import (
 	"github.com/cli/safeexec"
 )
 
-func Add(branch, path string) error {
+func Add(branch string) error {
 	cmdArgs := []string{"worktree", "add", branch}
 
 	return git(cmdArgs)
