@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	gh "github.com/cli/go-gh"
 	"github.com/spf13/cobra"
@@ -24,7 +25,7 @@ func run() error {
 
 func NewClone() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "clone [owner/repository]",
+		Use:     "clone [owner/repository] [directory]",
 		Short:   "Will clone a github repository into a folder",
 		Example: "gh worktree clone eikster-dk/gh-worktree",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -33,17 +34,33 @@ func NewClone() *cobra.Command {
 				return fmt.Errorf("[owner/repository] argument is required")
 			}
 
-			stdOut, _, err := gh.Exec("repo", "clone", repo, ".repo.git", "--", "--bare")
+			var directory = ""
+			ss := strings.Split(repo, "/")
+			if len(ss) == 1 {
+				directory = repo
+			} else {
+				directory = ss[1]
+			}
+
+			if len(args) > 1 {
+				directory = args[1]
+			}
+
+			repoPath := fmt.Sprintf("%s/%s", directory, ".repo.git")
+			_, stdErr, err := gh.Exec("repo", "clone", repo, repoPath, "--", "--bare")
 			if err != nil {
 				return err
 			}
-			fmt.Println(stdOut.String())
+			fmt.Println(stdErr.String())
 
-			err = os.WriteFile(".git", []byte("gitdir: ./.repo.git"), 0644)
+			fmt.Println("Setting up .git gitdir")
+			gitPath := fmt.Sprintf("%s/%s", directory, ".git")
+			err = os.WriteFile(gitPath, []byte("gitdir: ./.repo.git"), 0644)
 			if err != nil {
 				return err
 			}
 
+			fmt.Println("repository has been cloned and ready for git worktree")
 			return nil
 		},
 	}
