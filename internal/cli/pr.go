@@ -33,7 +33,7 @@ func NewPr() *cobra.Command {
 				return err
 			}
 
-			return worktree.Add(branch, "")
+			return worktree.Add(branch)
 		},
 	}
 
