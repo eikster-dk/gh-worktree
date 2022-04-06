@@ -46,19 +46,12 @@ func NewClone() *cobra.Command {
 				directory = args[1]
 			}
 
-			repoPath := fmt.Sprintf("%s/%s", directory, ".repo.git")
+			repoPath := fmt.Sprintf("%s/%s", directory, ".git")
 			_, stdErr, err := gh.Exec("repo", "clone", repo, repoPath, "--", "--bare")
 			if err != nil {
 				return err
 			}
 			fmt.Println(stdErr.String())
-
-			fmt.Println("Setting up .git gitdir")
-			gitPath := fmt.Sprintf("%s/%s", directory, ".git")
-			err = os.WriteFile(gitPath, []byte("gitdir: ./.repo.git"), 0644)
-			if err != nil {
-				return err
-			}
 
 			fmt.Println("repository has been cloned and ready for git worktree")
 			return nil
