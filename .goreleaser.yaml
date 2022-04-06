@@ -12,7 +12,7 @@ builds:
       - darwin
 archives:
   - name_template: "{{ .Os }}-{{ .Arch }}"
-    format: binar
+    format: binary
 checksum:
   name_template: 'checksums.txt'
 snapshot:
