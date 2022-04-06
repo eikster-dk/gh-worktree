@@ -1,5 +1,5 @@
 # gh-worktree
-A github cli extension with helper methods for git worktree related tasks.
+A github cli extension with an opinionated way of working with git worktree related tasks.
 
 # Installation
 ```
@@ -20,6 +20,7 @@ Available Commands:
   clone       Will clone a github repository into a folder
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
+  pr          Will checkout the pr into a worktree branch
 
 Flags:
   -h, --help   help for worktree
