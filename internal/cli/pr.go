@@ -58,7 +58,7 @@ func findByNumber(number int64) (string, error) {
 	}
 
 	var resp response
-	err = restApi.Get(fmt.Sprintf("/repos/%s/%s/pulls/%d", repo.Owner(), repo.Name(), number), &resp)
+	err = restApi.Get(fmt.Sprintf("repos/%s/%s/pulls/%d", repo.Owner(), repo.Name(), number), &resp)
 	if err != nil {
 		return "", fmt.Errorf("could not get pull request information: %w", err)
 	}

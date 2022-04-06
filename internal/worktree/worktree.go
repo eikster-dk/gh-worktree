@@ -7,7 +7,7 @@ import (
 )
 
 func Add(branch, path string) error {
-	cmdArgs := []string{"worktree", "add", path, branch}
+	cmdArgs := []string{"worktree", "add", path}
 
 	return git(cmdArgs)
 }
