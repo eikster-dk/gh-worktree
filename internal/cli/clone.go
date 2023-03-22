@@ -2,9 +2,11 @@ package cli
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
 
 	gh "github.com/cli/go-gh"
+	"github.com/cli/safeexec"
 	"github.com/spf13/cobra"
 )
 
@@ -37,6 +39,19 @@ func NewClone() *cobra.Command {
 				return err
 			}
 			fmt.Println(stdErr.String())
+
+            git, err := safeexec.LookPath("git")
+            if err != nil {
+                return err
+            }
+
+            c := exec.Command(git, "config", "remote.origin.fetch", "+refs/heads/*:refs/remotes/origin/*")
+            c.Dir = repoPath
+
+            err = c.Run()
+            if err != nil {
+                return err
+            }
 
 			fmt.Println("repository has been cloned and ready for git worktree")
 			return nil
