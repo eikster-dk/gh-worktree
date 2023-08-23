@@ -8,15 +8,22 @@ import (
 	"github.com/cli/safeexec"
 )
 
-func Add(branch string) error {
-	cmdArgs := []string{"worktree", "add", branch}
+func Add(branch string, path string) error {
+    var branchPath string
+    if path != "" {
+        branchPath = filepath.Join(path, branch)
+    } else {
+        gitPath, err := getCommonGitDirectory()
+        if err != nil {
+            return fmt.Errorf("could not get working directory: %w", err)
+        }
 
-	path, err := getCommonGitDirectory()
-	if err != nil {
-		return fmt.Errorf("could not get working directory: %w", err)
-	}
+        branchPath = filepath.Join(gitPath, branch)
+    }
 
-	_, err = git(cmdArgs, path)
+    cmdArgs := []string{"worktree", "add", branchPath}
+
+    _, err := git(cmdArgs, "")
 	return err
 }
 
@@ -38,7 +45,6 @@ func git(args []string, directory string) ([]byte, error) {
 		return nil, err
 	}
 	c := exec.Command(cmd, args...)
-	c.Dir = directory
 
 	return c.Output()
 }
