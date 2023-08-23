@@ -9,21 +9,21 @@ import (
 )
 
 func Add(branch string, path string) error {
-    var branchPath string
-    if path != "" {
-        branchPath = filepath.Join(path, branch)
-    } else {
-        gitPath, err := getCommonGitDirectory()
-        if err != nil {
-            return fmt.Errorf("could not get working directory: %w", err)
-        }
+	var branchPath string
+	if path != "" {
+		branchPath = filepath.Join(path, branch)
+	} else {
+		gitPath, err := getCommonGitDirectory()
+		if err != nil {
+			return fmt.Errorf("could not get working directory: %w", err)
+		}
 
-        branchPath = filepath.Join(gitPath, branch)
-    }
+		branchPath = filepath.Join(gitPath, branch)
+	}
 
-    cmdArgs := []string{"worktree", "add", branchPath}
+	cmdArgs := []string{"worktree", "add", branchPath}
 
-    _, err := git(cmdArgs, "")
+	_, err := git(cmdArgs, "")
 	return err
 }
 

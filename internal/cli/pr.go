@@ -27,8 +27,8 @@ func NewPr() *cobra.Command {
 			if err != nil {
 				return err
 			}
-            
-            var path string
+
+			var path string
 			if len(args) > 1 {
 				path = args[1]
 			}
