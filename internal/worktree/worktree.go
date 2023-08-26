@@ -8,21 +8,28 @@ import (
 	"github.com/cli/safeexec"
 )
 
-func Add(branch string) error {
-	cmdArgs := []string{"worktree", "add", branch}
+func Add(branch string, path string) error {
+	var branchPath string
+	if path != "" {
+		branchPath = filepath.Join(path, branch)
+	} else {
+		gitPath, err := getCommonGitDirectory()
+		if err != nil {
+			return fmt.Errorf("could not get working directory: %w", err)
+		}
 
-	path, err := getCommonGitDirectory()
-	if err != nil {
-		return fmt.Errorf("could not get working directory: %w", err)
+		branchPath = filepath.Join(gitPath, branch)
 	}
 
-	_, err = git(cmdArgs, path)
+	cmdArgs := []string{"worktree", "add", branchPath}
+
+	_, err := git(cmdArgs)
 	return err
 }
 
 func getCommonGitDirectory() (string, error) {
 	args := []string{"rev-parse", "--git-common-dir"}
-	b, err := git(args, "")
+	b, err := git(args)
 	if err != nil {
 		return "", fmt.Errorf("could not get git common dir: %w", err)
 	}
@@ -32,13 +39,12 @@ func getCommonGitDirectory() (string, error) {
 	return root, nil
 }
 
-func git(args []string, directory string) ([]byte, error) {
+func git(args []string) ([]byte, error) {
 	cmd, err := safeexec.LookPath("git")
 	if err != nil {
 		return nil, err
 	}
 	c := exec.Command(cmd, args...)
-	c.Dir = directory
 
 	return c.Output()
 }

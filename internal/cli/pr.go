@@ -28,12 +28,17 @@ func NewPr() *cobra.Command {
 				return err
 			}
 
+			var path string
+			if len(args) > 1 {
+				path = args[1]
+			}
+
 			branch, err := findByNumber(number)
 			if err != nil {
 				return err
 			}
 
-			return worktree.Add(branch)
+			return worktree.Add(branch, path)
 		},
 	}
 
